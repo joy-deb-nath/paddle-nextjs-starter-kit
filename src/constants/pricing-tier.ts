@@ -1,6 +1,6 @@
 export interface Tier {
   name: string;
-  id: 'starter' | 'pro' | 'advanced';
+  id: 'basic' | 'standard' | 'plus' | 'agency';
   icon: string;
   description: string;
   features: string[];
@@ -10,36 +10,51 @@ export interface Tier {
 
 export const PricingTier: Tier[] = [
   {
-    name: 'Starter',
-    id: 'starter',
+    name: 'Basic',
+    id: 'basic',
     icon: '/assets/icons/price-tiers/free-icon.svg',
-    description: 'Ideal for individuals who want to get started with simple design tasks.',
-    features: ['1 workspace', 'Limited collaboration', 'Export to PNG and SVG'],
+    description: '30,000 Words per month for individuals who want to get started.',
+    features: ['30,000 Words', 'Basic editing tools', 'Export to PNG and SVG'],
     featured: false,
-    priceId: { month: 'pri_01hsxyh9txq4rzbrhbyngkhy46', year: 'pri_01hsxyh9txq4rzbrhbyngkhy46' },
+    priceId: { month: 'pri_01jn3x7d4htzmm4tqrhbkq1ax4', year: 'pri_01jn4dsm64v0t5ss17rj6n7ke6' },
   },
   {
-    name: 'Pro',
-    id: 'pro',
+    name: 'Standard',
+    id: 'standard',
     icon: '/assets/icons/price-tiers/basic-icon.svg',
-    description: 'Enhanced design tools for scaling teams who need more flexibility.',
-    features: ['Integrations', 'Unlimited workspaces', 'Advanced editing tools', 'Everything in Starter'],
-    featured: true,
-    priceId: { month: 'pri_01hsxycme6m95sejkz7sbz5e9g', year: 'pri_01hsxyeb2bmrg618bzwcwvdd6q' },
+    description: '100,000 Words per month for teams who need more flexibility.',
+    features: ['100,000 Words', 'Integrations', 'Advanced editing tools', 'Everything in Basic'],
+    featured: false,
+    priceId: { month: 'pri_01jn3xabvx5kegdn2bd8dtpw16', year: 'pri_01jn4dv84nqhm4ezkmfgq7ngkg' },
   },
   {
-    name: 'Advanced',
-    id: 'advanced',
+    name: 'Plus',
+    id: 'plus',
     icon: '/assets/icons/price-tiers/pro-icon.svg',
-    description: 'Powerful tools designed for extensive collaboration and customization.',
+    description: '200,000 Words per month for extensive collaboration and customization.',
     features: [
-      'Single sign on (SSO)',
+      '200,000 Words',
       'Advanced version control',
       'Assets library',
       'Guest accounts',
-      'Everything in Pro',
+      'Everything in Standard',
+    ],
+    featured: true,
+    priceId: { month: 'pri_01jn3xgns7x7w2dk5k35n27yfw', year: 'pri_01jn4dxxz4kkbyxkvraa69wzj5' },
+  },
+  {
+    name: 'Agency',
+    id: 'agency',
+    icon: '/assets/icons/price-tiers/agency-icon.svg',
+    description: '500,000 Words per month for large teams and agencies.',
+    features: [
+      '500,000 Words',
+      'Single sign on (SSO)',
+      'Priority support',
+      'Custom integrations',
+      'Everything in Plus',
     ],
     featured: false,
-    priceId: { month: 'pri_01hsxyff091kyc9rjzx7zm6yqh', year: 'pri_01hsxyfysbzf90tkh2wqbfxwa5' },
+    priceId: { month: 'pri_01jn3xmehaga2btk2wwvvx9je3', year: 'pri_01jn4dz4hxcjgsvvqdpx37gkgc' },
   },
 ];

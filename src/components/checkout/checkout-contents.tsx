@@ -5,8 +5,9 @@ import { CheckoutFormGradients } from '@/components/gradients/checkout-form-grad
 import { type Environments, initializePaddle, type Paddle } from '@paddle/paddle-js';
 import type { CheckoutEventsData } from '@paddle/paddle-js/types/checkout/events';
 import throttle from 'lodash.throttle';
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+import { PricingTier } from '@/constants/pricing-tier';
 
 interface PathParams {
   priceId: string;
@@ -18,10 +19,16 @@ interface Props {
 }
 
 export function CheckoutContents({ userEmail }: Props) {
+  const router = useRouter();
   const { priceId } = useParams<PathParams>();
   const [quantity, setQuantity] = useState<number>(1);
   const [paddle, setPaddle] = useState<Paddle | null>(null);
   const [checkoutData, setCheckoutData] = useState<CheckoutEventsData | null>(null);
+
+  // Validate if the price ID exists in our pricing tiers
+  const isPriceIdValid = useCallback(() => {
+    return PricingTier.some((tier) => Object.values(tier.priceId).includes(priceId as string));
+  }, [priceId]);
 
   const handleCheckoutEvents = (event: CheckoutEventsData) => {
     setCheckoutData(event);
@@ -35,6 +42,12 @@ export function CheckoutContents({ userEmail }: Props) {
   );
 
   useEffect(() => {
+    // Redirect to home if price ID is invalid
+    if (!isPriceIdValid()) {
+      router.push('/');
+      return;
+    }
+
     if (!paddle?.Initialized && process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN && process.env.NEXT_PUBLIC_PADDLE_ENV) {
       initializePaddle({
         token: process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN,
@@ -59,20 +72,29 @@ export function CheckoutContents({ userEmail }: Props) {
       }).then(async (paddle) => {
         if (paddle && priceId) {
           setPaddle(paddle);
-          paddle.Checkout.open({
-            ...(userEmail && { customer: { email: userEmail } }),
-            items: [{ priceId: priceId, quantity: 1 }],
-          });
+          try {
+            await paddle.Checkout.open({
+              ...(userEmail && { customer: { email: userEmail } }),
+              items: [{ priceId: priceId as string, quantity: 1 }],
+            });
+          } catch (error) {
+            console.error('Paddle checkout error:', error);
+            router.push('/');
+          }
         }
       });
     }
-  }, [paddle?.Initialized, priceId, userEmail]);
+  }, [paddle?.Initialized, priceId, userEmail, isPriceIdValid, router]);
 
   useEffect(() => {
     if (paddle && priceId && paddle.Initialized) {
-      updateItems(paddle, priceId, quantity);
+      updateItems(paddle, priceId as string, quantity);
     }
   }, [paddle, priceId, quantity, updateItems]);
+
+  if (!isPriceIdValid()) {
+    return null;
+  }
 
   return (
     <div
