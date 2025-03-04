@@ -15,6 +15,11 @@ export default function Header({ user }: Props) {
           <Link className="flex items-center" href={'/'}>
             <Image className="w-auto block" src="/logo.svg" width={131} height={28} alt="AeroEdit" />
           </Link>
+          <div className="ml-10 hidden md:flex space-x-4">
+            <Button variant="ghost" asChild>
+              <Link href="/pricing">Pricing</Link>
+            </Button>
+          </div>
         </div>
         <div className="flex flex-1 items-center justify-end">
           <div className="flex space-x-4">
