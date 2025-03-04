@@ -2,14 +2,16 @@
 
 import { createClient } from '@/utils/supabase/client';
 import { useUserInfo } from '@/hooks/useUserInfo';
-import '../../styles/home-page.css';
-import { LocalizationBanner } from '@/components/home/header/localization-banner';
-import Header from '@/components/home/header/header';
 import { HomePageBackground } from '@/components/gradients/home-page-background';
-import { Footer } from '@/components/home/footer/footer';
-import Link from 'next/link';
+import { Hero } from '@/components/landing/hero/hero';
+import { Features } from '@/components/landing/features/features';
+import Header from '@/components/home/header/header';
+import { CustomFooter } from '@/components/landing/footer/custom-footer';
 import { Button } from '@/components/ui/button';
+import Link from 'next/link';
+import '../../styles/home-page.css';
 import { ArrowRight } from 'lucide-react';
+import { TextProcessor } from '@/components/text-processor/text-processor';
 
 export function LandingPage() {
   const supabase = createClient();
@@ -17,62 +19,83 @@ export function LandingPage() {
 
   return (
     <>
-      <LocalizationBanner country="US" onCountryChange={() => {}} />
       <div>
         <HomePageBackground />
         <Header user={user} />
 
-        <main className="mx-auto max-w-7xl px-6 lg:px-8 py-24 sm:py-32">
-          <div className="text-center">
-            <h1 className="text-4xl font-bold tracking-tight sm:text-6xl bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
-              Your SaaS Solution
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-              Streamline your workflow, collaborate seamlessly, and scale your business with our powerful SaaS platform.
-              Built with cutting-edge technology to deliver exceptional performance.
+        {/* Hero Section */}
+        <Hero />
+
+        {/* Features Section */}
+        <Features />
+
+        {/* Text Processor Section */}
+        <section className="container mx-auto px-4 py-16">
+          <div className="mx-auto max-w-6xl">
+            <h2 className="text-center text-3xl font-bold tracking-tight sm:text-4xl mb-8">AI Text Processor</h2>
+            <p className="text-center mt-4 mb-10 text-lg leading-8 text-gray-400 max-w-3xl mx-auto">
+              Our advanced text processing tool helps humanize AI-generated content and bypass AI detectors. Perfect for
+              content creators, students, and professionals looking to improve their writing.
             </p>
-            <div className="mt-10 flex items-center justify-center gap-x-6">
-              <Button asChild size="lg">
-                <Link href="/signup">Get started</Link>
+            <TextProcessor />
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="container mx-auto px-4 py-16 text-center">
+          <div className="mx-auto max-w-3xl">
+            <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Ready to get started?</h2>
+            <p className="mt-6 text-lg leading-8 text-gray-400">
+              Join thousands of businesses that trust our platform. Start your journey with a 14-day free trial, no
+              credit card required.
+            </p>
+            <div className="mt-10 flex items-center justify-center gap-6">
+              <Button asChild size="lg" className="bg-indigo-600 hover:bg-indigo-700">
+                <Link href="/signup">Start Free Trial</Link>
               </Button>
               <Button asChild variant="outline" size="lg">
-                <Link href="/pricing" className="flex items-center">
-                  View pricing <ArrowRight className="ml-2 h-4 w-4" />
-                </Link>
+                <Link href="/pricing">View Pricing</Link>
               </Button>
             </div>
           </div>
+        </section>
 
-          <div className="mt-32 grid grid-cols-1 gap-y-16 sm:grid-cols-2 lg:grid-cols-3 lg:gap-x-8">
+        {/* Testimonials Section */}
+        <section className="container mx-auto px-4 py-16">
+          <h2 className="mb-12 text-center text-3xl font-bold md:text-4xl">What Our Customers Say</h2>
+          <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2 lg:grid-cols-3">
             {[
               {
-                title: 'Feature One',
-                description: 'Powerful tools to streamline your workflow and boost productivity.',
-                icon: '✨',
+                quote:
+                  'This platform completely transformed how we manage our business processes. The ROI has been incredible.',
+                author: 'Sarah Johnson',
+                title: 'CEO, TechStart Inc.',
               },
               {
-                title: 'Feature Two',
-                description: 'Real-time collaboration for teams of any size.',
-                icon: '🔄',
+                quote:
+                  "The analytics features alone are worth the investment. We've gained insights we never thought possible.",
+                author: 'Michael Chen',
+                title: 'CTO, Data Dynamics',
               },
               {
-                title: 'Feature Three',
-                description: 'Enterprise-grade security to protect your valuable data.',
-                icon: '🛡️',
+                quote: 'Customer support is phenomenal. Any questions we had were answered quickly and thoroughly.',
+                author: 'Amanda Rodriguez',
+                title: 'Operations Manager, Global Solutions',
               },
-            ].map((feature, index) => (
-              <div key={index} className="flex flex-col items-center">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-indigo-100 dark:bg-indigo-900 text-2xl">
-                  {feature.icon}
+            ].map((testimonial, index) => (
+              <div key={index} className="rounded-lg bg-[#1A1527] p-6">
+                <div className="mb-4 text-2xl text-indigo-300">"</div>
+                <p className="italic mb-6 text-gray-300">{testimonial.quote}</p>
+                <div>
+                  <p className="font-semibold">{testimonial.author}</p>
+                  <p className="text-sm text-gray-400">{testimonial.title}</p>
                 </div>
-                <h3 className="mt-6 text-lg font-semibold">{feature.title}</h3>
-                <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 text-center">{feature.description}</p>
               </div>
             ))}
           </div>
-        </main>
+        </section>
 
-        <Footer />
+        <CustomFooter />
       </div>
     </>
   );
